@@ -1,0 +1,72 @@
+/* Enhanced Dashboard Styles for User and Admin */
+.dashboard-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    justify-content: space-between;
+    margin-bottom: 2em;
+}
+.dashboard-card {
+    flex: 1 1 220px;
+    min-width: 220px;
+    background: #f4f8fb;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 1.5em 1em;
+    text-align: center;
+    margin: 0.5em;
+    transition: box-shadow 0.2s;
+}
+.dashboard-card:hover {
+    box-shadow: 0 4px 16px rgba(0,51,102,0.12);
+}
+.dashboard-card .icon {
+    font-size: 2.5em;
+    color: #0055a5;
+    margin-bottom: 0.5em;
+}
+.dashboard-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-bottom: 2em;
+}
+.summary-item {
+    background: #e6f0fa;
+    border-radius: 8px;
+    padding: 1em 2em;
+    flex: 1 1 140px;
+    min-width: 140px;
+    text-align: center;
+    color: #003366;
+    font-weight: 600;
+}
+.recent-list {
+    margin: 1em 0 2em 0;
+    padding: 0;
+    list-style: none;
+}
+.recent-list li {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,51,102,0.06);
+    margin-bottom: 0.5em;
+    padding: 0.8em 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.recent-list li .status {
+    padding: 0.2em 0.7em;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+.status-approved { background: #d4f5e9; color: #1a7f5a; }
+.status-processing { background: #fff3cd; color: #856404; }
+.status-rejected { background: #f8d7da; color: #721c24; }
+
+@media (max-width: 700px) {
+    .dashboard-container, .dashboard-summary { flex-direction: column; gap: 1em; }
+    .dashboard-card, .summary-item { min-width: 100%; }
+}
