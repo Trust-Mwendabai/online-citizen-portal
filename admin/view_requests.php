@@ -19,33 +19,72 @@ $result = $conn->query('SELECT sr.id, u.name, sr.type, sr.subtype, sr.status, sr
 $requests = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 <?php include '../includes/header.php'; ?>
-<main>
-<h2>All Service Requests</h2>
-<table border="1" cellpadding="8" style="width:100%;background:#fff;">
-    <tr><th>ID</th><th>User</th><th>Type</th><th>Subtype</th><th>Status</th><th>Submitted</th><th>Last Update</th><th>Action</th></tr>
-    <?php foreach ($requests as $r): ?>
-    <tr>
-        <td><?= $r['id'] ?></td>
-        <td><?= htmlspecialchars($r['name']) ?></td>
-        <td><?= htmlspecialchars($r['type']) ?></td>
-        <td><?= htmlspecialchars($r['subtype']) ?></td>
-        <td><?= htmlspecialchars($r['status']) ?></td>
-        <td><?= $r['submission_date'] ?></td>
-        <td><?= $r['last_update'] ?></td>
-        <td>
-            <form method="post" style="display:inline;">
-                <input type="hidden" name="request_id" value="<?= $r['id'] ?>">
-                <select name="status">
-                    <option value="pending" <?= $r['status']=='pending'?'selected':'' ?>>Pending</option>
-                    <option value="processing" <?= $r['status']=='processing'?'selected':'' ?>>Processing</option>
-                    <option value="approved" <?= $r['status']=='approved'?'selected':'' ?>>Approved</option>
-                    <option value="rejected" <?= $r['status']=='rejected'?'selected':'' ?>>Rejected</option>
-                </select>
-                <button type="submit">Update</button>
-            </form>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-</table>
+
+<main class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="display-5 mb-3">All Service Requests</h2>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Type</th>
+                            <th>Subtype</th>
+                            <th>Status</th>
+                            <th>Submitted</th>
+                            <th>Last Update</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($requests as $r): ?>
+                        <tr>
+                            <td><?= $r['id'] ?></td>
+                            <td><?= htmlspecialchars($r['name']) ?></td>
+                            <td><?= htmlspecialchars($r['type']) ?></td>
+                            <td><?= htmlspecialchars($r['subtype']) ?></td>
+                            <td>
+                                <?php
+                                $statusClass = match($r['status']) {
+                                    'approved' => 'success',
+                                    'processing' => 'warning',
+                                    'rejected' => 'danger',
+                                    'pending' => 'secondary',
+                                    default => 'secondary'
+                                };
+                                ?>
+                                <span class="badge bg-<?= $statusClass ?>"><?= htmlspecialchars($r['status']) ?></span>
+                            </td>
+                            <td><?= date('M d, Y', strtotime($r['submission_date'])) ?></td>
+                            <td><?= date('M d, Y', strtotime($r['last_update'])) ?></td>
+                            <td>
+                                <form method="post" class="d-flex gap-2">
+                                    <input type="hidden" name="request_id" value="<?= $r['id'] ?>">
+                                    <select name="status" class="form-select form-select-sm">
+                                        <option value="pending" <?= $r['status']=='pending'?'selected':'' ?>>Pending</option>
+                                        <option value="processing" <?= $r['status']=='processing'?'selected':'' ?>>Processing</option>
+                                        <option value="approved" <?= $r['status']=='approved'?'selected':'' ?>>Approved</option>
+                                        <option value="rejected" <?= $r['status']=='rejected'?'selected':'' ?>>Rejected</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        <i class="fa-solid fa-check me-1"></i>Update
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </main>
+
 <?php include '../includes/footer.php'; ?>

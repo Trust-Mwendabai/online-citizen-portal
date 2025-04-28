@@ -1,0 +1,96 @@
+/* Enhanced styles for index.php landing page */
+.hero-btn {
+    font-size: 1.2em;
+    padding: 0.7em 2.2em;
+    border-radius: 30px;
+    border: none;
+    background: linear-gradient(90deg, #003366 60%, #0055a5 100%);
+    color: #fff;
+    font-weight: 600;
+    margin: 0 0.5em 0.5em 0;
+    box-shadow: 0 2px 8px rgba(0,51,102,0.07);
+    transition: background 0.2s, transform 0.2s;
+    cursor: pointer;
+}
+.hero-btn:hover {
+    background: linear-gradient(90deg, #0055a5 60%, #003366 100%);
+    transform: translateY(-2px) scale(1.04);
+}
+@media (max-width: 700px) {
+    .hero-btn { width: 100%; margin-bottom: 1em; }
+}
+
+.testimonials-carousel {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto 2em auto;
+    min-height: 210px;
+}
+.testimonial-item {
+    min-width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s;
+    position: absolute;
+    left: 0; top: 0;
+    right: 0; bottom: 0;
+    background: linear-gradient(120deg,#e8f1fa 60%,#fff 100%);
+    border-radius: 14px;
+    padding: 2em 1.5em;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    z-index: 1;
+}
+.testimonial-item.active {
+    opacity: 1;
+    z-index: 2;
+    position: relative;
+}
+.testimonial-nav {
+    text-align: center;
+    margin-top: 1em;
+}
+.testimonial-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background: #003366;
+    border-radius: 50%;
+    opacity: 0.25;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.testimonial-dot.active {
+    opacity: 0.8;
+}
+
+.faq-item button {
+    transition: background 0.2s;
+}
+.faq-item button[aria-expanded="true"] {
+    background: #d9e6f6;
+}
+
+.fab-help {
+    position: fixed;
+    right: 24px;
+    bottom: 32px;
+    background: #003366;
+    color: #fff;
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    box-shadow: 0 4px 16px rgba(0,51,102,0.15);
+    z-index: 99;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+.fab-help:hover {
+    background: #0055a5;
+    transform: scale(1.07);
+}

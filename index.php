@@ -1,143 +1,402 @@
-<?php include 'includes/header.php'; ?>
-<main style="background: linear-gradient(120deg, #e8f1fa 60%, #fff 100%); min-height: 100vh; padding-bottom: 2em;">
-    <!-- Hero Section -->
-    <section style="background: linear-gradient(90deg, #003366 60%, #0055a5 100%); color: #fff; padding: 3.5em 2em 3em 2em; border-radius: 18px; text-align: center; margin-bottom: 2.5em; position:relative; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.09);">
-        <div style="position:absolute; top:-40px; right:-60px; opacity:0.08; font-size:12em; pointer-events:none;">🌍</div>
-        <h2 style="font-size: 2.7em; margin-bottom: 0.4em; font-family:'Montserrat', Arial, sans-serif;">Welcome to the Online Citizen Service Portal</h2>
-        <p style="font-size: 1.3em; max-width: 700px; margin: 0 auto 1.5em auto;">Your one-stop platform to request, track, and manage government services with ease and transparency.</p>
-        <a href="register.php"><button style="font-size:1.2em; margin-right:1em;">Get Started</button></a>
-        <a href="login.php"><button style="font-size:1.2em; background:#fff; color:#003366; border:2px solid #003366;">Login</button></a>
-    </section>
+<?php
+require_once 'config/db.php';
 
-    <!-- Stats/Impact Section -->
-    <section style="display:flex; justify-content:center; gap:2em; margin-bottom:2.5em; flex-wrap:wrap;">
-        <div style="flex:1 1 180px; min-width:180px; background:#f1f7fd; border-radius:10px; padding:1.5em; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
-            <div style="font-size:2em; color:#003366;">👥</div>
-            <div style="font-size:2em; font-weight:bold;">5,000+</div>
-            <div>Citizens Served</div>
-        </div>
-        <div style="flex:1 1 180px; min-width:180px; background:#f1f7fd; border-radius:10px; padding:1.5em; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
-            <div style="font-size:2em; color:#003366;">📄</div>
-            <div style="font-size:2em; font-weight:bold;">12,300+</div>
-            <div>Requests Processed</div>
-        </div>
-        <div style="flex:1 1 180px; min-width:180px; background:#f1f7fd; border-radius:10px; padding:1.5em; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
-            <div style="font-size:2em; color:#003366;">⏱️</div>
-            <div style="font-size:2em; font-weight:bold;">24/7</div>
-            <div>Online Access</div>
-        </div>
-    </section>
+// Get total users count
+$result = $conn->query('SELECT COUNT(*) as total FROM users WHERE role = "citizen"');
+$users_count = $result->fetch_assoc()['total'];
 
-    <!-- Features Section -->
-    <section style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 2em; margin-bottom: 2em;">
-        <div style="flex:1 1 220px; background:#f9f9f9; border-radius:8px; padding:2em; box-shadow:0 1px 4px rgba(0,0,0,0.06); text-align:center;">
-            <div style="font-size:2.5em;">📝</div>
-            <h3>Easy Applications</h3>
-            <p>Apply for permits and certificates online in minutes.</p>
-        </div>
-        <div style="flex:1 1 220px; background:#f9f9f9; border-radius:8px; padding:2em; box-shadow:0 1px 4px rgba(0,0,0,0.06); text-align:center;">
-            <div style="font-size:2.5em;">📈</div>
-            <h3>Track Progress</h3>
-            <p>Monitor the status of your requests in real time.</p>
-        </div>
-        <div style="flex:1 1 220px; background:#f9f9f9; border-radius:8px; padding:2em; box-shadow:0 1px 4px rgba(0,0,0,0.06); text-align:center;">
-            <div style="font-size:2.5em;">🔔</div>
-            <h3>Instant Notifications</h3>
-            <p>Receive email or SMS alerts for every update.</p>
-        </div>
-        <div style="flex:1 1 220px; background:#f9f9f9; border-radius:8px; padding:2em; box-shadow:0 1px 4px rgba(0,0,0,0.06); text-align:center;">
-            <div style="font-size:2.5em;">⭐</div>
-            <h3>Feedback & Support</h3>
-            <p>Rate services and share your experience for continuous improvement.</p>
-        </div>
-    </section>
+// Get total requests count
+$result = $conn->query('SELECT COUNT(*) as total FROM service_requests');
+$requests_count = $result->fetch_assoc()['total'];
 
-    <!-- How It Works Section -->
-    <section style="background:#e8f1fa; border-radius:16px; padding:2.5em 1em 2em 1em; margin-bottom:2.5em; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-        <h3 style="text-align:center; font-size:2em; margin-bottom:1.5em;">How It Works</h3>
-        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:2em; max-width:900px; margin:0 auto;">
-            <div style="flex:1 1 160px; min-width:160px; background:#fff; border-radius:10px; padding:1.5em; text-align:center; box-shadow:0 1px 8px rgba(0,0,0,0.06); transition:transform 0.2s; position:relative;">
-                <div style="font-size:2em; color:#0055a5; margin-bottom:0.5em;">1</div>
-                <div style="font-size:2em;">👤</div>
-                <div style="font-weight:500; margin-top:0.5em;">Register</div>
-                <div style="font-size:0.98em; color:#555;">Create your free account</div>
+include 'includes/header.php';
+?>
+
+<!-- Hero Section with Animation -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 animate__animated animate__fadeInLeft">
+                <h1 class="display-3 fw-bold text-white mb-4">Welcome to the Online Citizen Service Portal</h1>
+                <p class="lead text-white mb-4">Your one-stop platform to request, track, and manage government services with ease and transparency.</p>
+                <div class="d-flex gap-3">
+                    <a href="register.php" class="btn btn-light btn-lg px-4 animate__animated animate__pulse animate__infinite">
+                        <i class="fa-solid fa-user-plus me-2"></i>Get Started
+                    </a>
+                    <a href="login.php" class="btn btn-outline-light btn-lg px-4">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>Login
+                    </a>
+                </div>
             </div>
-            <div style="flex:1 1 160px; min-width:160px; background:#fff; border-radius:10px; padding:1.5em; text-align:center; box-shadow:0 1px 8px rgba(0,0,0,0.06); transition:transform 0.2s; position:relative;">
-                <div style="font-size:2em; color:#0055a5; margin-bottom:0.5em;">2</div>
-                <div style="font-size:2em;">🔑</div>
-                <div style="font-weight:500; margin-top:0.5em;">Login</div>
-                <div style="font-size:0.98em; color:#555;">Access your dashboard</div>
-            </div>
-            <div style="flex:1 1 160px; min-width:160px; background:#fff; border-radius:10px; padding:1.5em; text-align:center; box-shadow:0 1px 8px rgba(0,0,0,0.06); transition:transform 0.2s; position:relative;">
-                <div style="font-size:2em; color:#0055a5; margin-bottom:0.5em;">3</div>
-                <div style="font-size:2em;">📝</div>
-                <div style="font-weight:500; margin-top:0.5em;">Submit Request</div>
-                <div style="font-size:0.98em; color:#555;">Apply for permits/certificates</div>
-            </div>
-            <div style="flex:1 1 160px; min-width:160px; background:#fff; border-radius:10px; padding:1.5em; text-align:center; box-shadow:0 1px 8px rgba(0,0,0,0.06); transition:transform 0.2s; position:relative;">
-                <div style="font-size:2em; color:#0055a5; margin-bottom:0.5em;">4</div>
-                <div style="font-size:2em;">📈</div>
-                <div style="font-weight:500; margin-top:0.5em;">Track Progress</div>
-                <div style="font-size:0.98em; color:#555;">Get real-time updates</div>
-            </div>
-            <div style="flex:1 1 160px; min-width:160px; background:#fff; border-radius:10px; padding:1.5em; text-align:center; box-shadow:0 1px 8px rgba(0,0,0,0.06); transition:transform 0.2s; position:relative;">
-                <div style="font-size:2em; color:#0055a5; margin-bottom:0.5em;">5</div>
-                <div style="font-size:2em;">✅</div>
-                <div style="font-weight:500; margin-top:0.5em;">Download & Feedback</div>
-                <div style="font-size:0.98em; color:#555;">Get documents & rate service</div>
+            <div class="col-lg-6 animate__animated animate__fadeInRight">
+                <img src="/Online_Citizen_Service_Portal/public/images/hero-illustration.svg" alt="Service Portal" class="img-fluid">
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- FAQ Section (collapsible) -->
-    <section style="background:#fff; border-radius:16px; padding:2.5em 1em 2em 1em; margin-bottom:2.5em; box-shadow:0 2px 8px rgba(0,0,0,0.04); max-width:900px; margin-left:auto; margin-right:auto;">
-        <h3 style="text-align:center; font-size:2em; margin-bottom:1.5em;">Frequently Asked Questions</h3>
-        <div style="max-width:750px; margin:0 auto;">
-            <div class="faq-item" style="margin-bottom:1em;">
-                <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';" style="width:100%;text-align:left;padding:1em 1.5em;font-size:1.08em;font-weight:600;background:#e8f1fa;border:none;border-radius:8px;cursor:pointer;outline:none;transition:background 0.2s;">How do I register?</button>
-                <div style="display:none;padding:1em 2em 1em 2em;background:#f9f9f9;">Click the "Register" button at the top and fill in your details. You’ll get instant access to your dashboard.</div>
+<!-- Stats Section with Counter Animation -->
+<section class="stats-section py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 animate__animated animate__fadeInUp">
+                    <div class="card-body text-center p-4">
+                        <div class="display-4 text-primary mb-3">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h3 class="display-6 fw-bold counter"><?= number_format($users_count) ?>+</h3>
+                        <p class="text-muted">Citizens Served</p>
+                    </div>
+                </div>
             </div>
-            <div class="faq-item" style="margin-bottom:1em;">
-                <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';" style="width:100%;text-align:left;padding:1em 1.5em;font-size:1.08em;font-weight:600;background:#e8f1fa;border:none;border-radius:8px;cursor:pointer;outline:none;transition:background 0.2s;">What services can I request?</button>
-                <div style="display:none;padding:1em 2em 1em 2em;background:#f9f9f9;">Permits (Business, Construction, Event) and Certificates (Birth, Marriage, Police Clearance).</div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                    <div class="card-body text-center p-4">
+                        <div class="display-4 text-primary mb-3">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+                        <h3 class="display-6 fw-bold counter"><?= number_format($requests_count) ?>+</h3>
+                        <p class="text-muted">Requests Processed</p>
+                    </div>
+                </div>
             </div>
-            <div class="faq-item" style="margin-bottom:1em;">
-                <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';" style="width:100%;text-align:left;padding:1em 1.5em;font-size:1.08em;font-weight:600;background:#e8f1fa;border:none;border-radius:8px;cursor:pointer;outline:none;transition:background 0.2s;">How do I track my application?</button>
-                <div style="display:none;padding:1em 2em 1em 2em;background:#f9f9f9;">Login and go to "View My Requests" in your dashboard to see real-time updates and download documents.</div>
-            </div>
-            <div class="faq-item" style="margin-bottom:1em;">
-                <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';" style="width:100%;text-align:left;padding:1em 1.5em;font-size:1.08em;font-weight:600;background:#e8f1fa;border:none;border-radius:8px;cursor:pointer;outline:none;transition:background 0.2s;">Is my information secure?</button>
-                <div style="display:none;padding:1em 2em 1em 2em;background:#f9f9f9;">Yes. We use secure protocols and never share your data without consent.</div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                    <div class="card-body text-center p-4">
+                        <div class="display-4 text-primary mb-3">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <h3 class="display-6 fw-bold">24/7</h3>
+                        <p class="text-muted">Online Access</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Testimonials Section (cards) -->
-    <section style="margin-bottom:2.5em;">
-        <h3 style="text-align:center; font-size:2em; margin-bottom:1.5em;">What Citizens Say</h3>
-        <div style="display:flex; flex-wrap:wrap; gap:2em; justify-content:center; max-width:900px; margin:0 auto;">
-            <div style="flex:1 1 250px; min-width:250px; background:linear-gradient(120deg,#e8f1fa 60%,#fff 100%); border-radius:14px; padding:2em 1.5em; box-shadow:0 2px 12px rgba(0,0,0,0.06); position:relative;">
-                <div style="position:absolute;top:-30px;left:-30px;font-size:3em;opacity:0.08;">💬</div>
-                <p style="font-size:1.1em;">“The portal made it so easy to get my business permit. I could track everything online!”</p>
-                <p style="font-weight:bold; margin-top:1em; color:#003366;">— Chanda M.</p>
+<!-- Features Section with Hover Effects -->
+<section class="features-section py-5">
+    <div class="container">
+        <h2 class="text-center display-4 mb-5 animate__animated animate__fadeIn">Our Services</h2>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100 feature-card animate__animated animate__fadeInUp">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fa-solid fa-file-pen display-4 text-primary"></i>
+                        </div>
+                        <h4>Easy Applications</h4>
+                        <p class="text-muted">Apply for permits and certificates online in minutes.</p>
+                    </div>
+                </div>
             </div>
-            <div style="flex:1 1 250px; min-width:250px; background:linear-gradient(120deg,#e8f1fa 60%,#fff 100%); border-radius:14px; padding:2em 1.5em; box-shadow:0 2px 12px rgba(0,0,0,0.06); position:relative;">
-                <div style="position:absolute;top:-30px;left:-30px;font-size:3em;opacity:0.08;">💬</div>
-                <p style="font-size:1.1em;">“I love the instant notifications and how fast my certificate was processed.”</p>
-                <p style="font-weight:bold; margin-top:1em; color:#003366;">— Mwansa K.</p>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100 feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fa-solid fa-chart-line display-4 text-primary"></i>
+                        </div>
+                        <h4>Track Progress</h4>
+                        <p class="text-muted">Monitor the status of your requests in real time.</p>
+                    </div>
+                </div>
             </div>
-            <div style="flex:1 1 250px; min-width:250px; background:linear-gradient(120deg,#e8f1fa 60%,#fff 100%); border-radius:14px; padding:2em 1.5em; box-shadow:0 2px 12px rgba(0,0,0,0.06); position:relative;">
-                <div style="position:absolute;top:-30px;left:-30px;font-size:3em;opacity:0.08;">💬</div>
-                <p style="font-size:1.1em;">“Highly recommended! The feedback system is great and the staff is responsive.”</p>
-                <p style="font-weight:bold; margin-top:1em; color:#003366;">— Lombe P.</p>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100 feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fa-solid fa-bell display-4 text-primary"></i>
+                        </div>
+                        <h4>Instant Notifications</h4>
+                        <p class="text-muted">Receive email or SMS alerts for every update.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100 feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.6s">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fa-solid fa-star display-4 text-primary"></i>
+                        </div>
+                        <h4>Feedback & Support</h4>
+                        <p class="text-muted">Rate services and share your experience.</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Call to Action -->
-    <section style="text-align:center; margin-bottom:2em;">
-        <h3>Ready to get started?</h3>
-        <a href="register.php"><button style="font-size:1.2em;">Create Your Account</button></a>
-    </section>
-</main>
+<!-- How It Works Section with Timeline -->
+<section class="how-it-works-section py-5">
+    <div class="container">
+        <h2 class="text-center display-4 mb-5 animate__animated animate__fadeIn">How It Works</h2>
+        <div class="row">
+            <div class="col-12">
+                <div class="timeline">
+                    <div class="timeline-item animate__animated animate__fadeInLeft">
+                        <div class="timeline-icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Register</h4>
+                            <p>Create your free account</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item animate__animated animate__fadeInRight">
+                        <div class="timeline-icon">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Login</h4>
+                            <p>Access your dashboard</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item animate__animated animate__fadeInLeft">
+                        <div class="timeline-icon">
+                            <i class="fa-solid fa-file-pen"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Submit Request</h4>
+                            <p>Apply for permits/certificates</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item animate__animated animate__fadeInRight">
+                        <div class="timeline-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Track Progress</h4>
+                            <p>Get real-time updates</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section with Accordion -->
+<section class="faq-section py-5">
+    <div class="container">
+        <h2 class="text-center display-4 mb-5 animate__animated animate__fadeIn">Frequently Asked Questions</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item border-0 mb-3 animate__animated animate__fadeInUp">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                <i class="fa-solid fa-question me-2"></i>How do I register?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Click the "Register" button at the top and fill in your details. You'll get instant access to your dashboard.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item border-0 mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                <i class="fa-solid fa-question me-2"></i>What services can I request?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Permits (Business, Construction, Event) and Certificates (Birth, Marriage, Police Clearance).
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item border-0 mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                <i class="fa-solid fa-question me-2"></i>How do I track my application?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Login and go to "View My Requests" in your dashboard to see real-time updates and download documents.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section with Carousel -->
+<section class="testimonials-section py-5">
+    <div class="container">
+        <h2 class="text-center display-4 mb-5 animate__animated animate__fadeIn">What Citizens Say</h2>
+        <div class="row">
+            <div class="col-12">
+                <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="testimonial-card text-center p-4">
+                                <div class="testimonial-icon mb-3">
+                                    <i class="fa-solid fa-quote-left display-4 text-primary"></i>
+                                </div>
+                                <p class="lead mb-3">"Fast, transparent, and easy! I got my permit in days."</p>
+                                <h5 class="text-primary">Jane M.</h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="testimonial-card text-center p-4">
+                                <div class="testimonial-icon mb-3">
+                                    <i class="fa-solid fa-quote-left display-4 text-primary"></i>
+                                </div>
+                                <p class="lead mb-3">"I love being able to track my requests online."</p>
+                                <h5 class="text-primary">Samuel K.</h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="testimonial-card text-center p-4">
+                                <div class="testimonial-icon mb-3">
+                                    <i class="fa-solid fa-quote-left display-4 text-primary"></i>
+                                </div>
+                                <p class="lead mb-3">"The online system saved me so much time and hassle."</p>
+                                <h5 class="text-primary">Maria L.</h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="testimonial-card text-center p-4">
+                                <div class="testimonial-icon mb-3">
+                                    <i class="fa-solid fa-quote-left display-4 text-primary"></i>
+                                </div>
+                                <p class="lead mb-3">"Excellent service! The staff was very helpful."</p>
+                                <h5 class="text-primary">John D.</h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="testimonial-card text-center p-4">
+                                <div class="testimonial-icon mb-3">
+                                    <i class="fa-solid fa-quote-left display-4 text-primary"></i>
+                                </div>
+                                <p class="lead mb-3">"The portal made getting my documents so much easier."</p>
+                                <h5 class="text-primary">Sarah P.</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section py-5">
+    <div class="container text-center">
+        <h2 class="display-4 mb-4 animate__animated animate__fadeIn">Ready to get started?</h2>
+        <a href="register.php" class="btn btn-primary btn-lg px-5 animate__animated animate__pulse animate__infinite">
+            Create Your Account
+        </a>
+    </div>
+</section>
+
+<!-- Add Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+<!-- Custom CSS -->
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, rgba(0, 51, 102, 0.9) 0%, rgba(0, 85, 165, 0.85) 100%);
+        padding: 100px 0;
+    }
+    .feature-card {
+        transition: transform 0.3s ease;
+    }
+    .feature-card:hover {
+        transform: translateY(-10px);
+    }
+    .feature-icon {
+        transition: transform 0.3s ease;
+    }
+    .feature-card:hover .feature-icon {
+        transform: scale(1.1);
+    }
+    .timeline {
+        position: relative;
+        padding: 20px 0;
+    }
+    .timeline::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 2px;
+        height: 100%;
+        background: #003366;
+    }
+    .timeline-item {
+        position: relative;
+        margin-bottom: 50px;
+    }
+    .timeline-icon {
+        width: 50px;
+        height: 50px;
+        background: #003366;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .timeline-content {
+        width: 45%;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .timeline-item:nth-child(odd) .timeline-content {
+        margin-left: auto;
+    }
+    .testimonial-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+    }
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 5%;
+    }
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: #003366;
+        border-radius: 50%;
+        padding: 20px;
+    }
+</style>
+
+<!-- Add jQuery and Counter Plugin -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.min.js"></script>
+
+<!-- Initialize Counter -->
+<script>
+    $(document).ready(function() {
+        $('.counter').counterUp({
+            delay: 10,
+            time: 1000
+        });
+    });
+</script>
+
 <?php include 'includes/footer.php'; ?>
